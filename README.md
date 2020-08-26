@@ -1,4 +1,4 @@
-# vue_stictch
+# vue_stictch 
 
 ## Project setup
 ```
