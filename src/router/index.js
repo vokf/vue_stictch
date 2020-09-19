@@ -2,8 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/Home'
 import App from '@/App'
-import Login from '@/components/Login'
-import Register from '@/components/Register'
+import UserLogin from '@/views/UserLogin'
+import UserRegister from '@/views/UserRegister'
 
 Vue.use(VueRouter)
 
@@ -33,14 +33,14 @@ const routes = [
   },
   {
     path: '/login',
-    component: Login,
+    component: UserLogin,
     meta: {
       title: '登录'
     }
   },
   {
     path: '/register',
-    component: Register,
+    component: UserRegister,
     meta: {
       title: '注册'
     }
