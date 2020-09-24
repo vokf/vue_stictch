@@ -1,24 +1,37 @@
 <template>
-  <div id="app">
-    <Index />
+  <div>
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-</style>
 <script>
-import Index from '@/components/Index'
 export default {
-  components: {
-    Index
+  provide() {
+    return {
+      reload: this.reload
+    }
   },
   data() {
-    return {}
+    return {
+      isRouterAlive: true
+    }
+  },
+  methods: {
+    reload() {
+      this.isRouterAlive = false
+      this.$nextTick(function() {
+        this.isRouterAlive = true
+      })
+    }
   }
 }
 </script>
+
+<style scoped>
+* {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+</style>
