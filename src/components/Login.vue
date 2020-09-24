@@ -5,8 +5,8 @@
       <el-main
         style="background: #c0cee9;height: 300px;width: 300px;margin-left: auto;margin-right: auto"
       >
-        <el-form>
-          <el-form-item>
+        <el-form :rules="rule" ref="user" status-icon :model="user">
+          <el-form-item prop="userName">
             <el-input
               placeholder="用户名"
               auto-complete="on"
@@ -15,7 +15,7 @@
             />
           </el-form-item>
 
-          <el-form-item>
+          <el-form-item prop="password">
             <el-input
               auto-complete="on"
               type="password"
@@ -49,6 +49,21 @@ import http from '@/data/http'
 export default {
   name: 'Login',
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.user.password !== '') {
+          this.$refs.user.validateField('password')
+        }
+        callback()
+      }
+    }
+    var checkUser = (rule, value, callback) => {
+      if (value === '') {
+        return callback(new Error('请输入您的用户名'))
+      }
+    }
     return {
       logining: false,
       // form 表单的input 数据
@@ -57,7 +72,30 @@ export default {
         password: ''
       },
       check: false,
-      rules: {}
+      rule: {
+        userName: [
+          {
+            require: true,
+            message: '请输入您的用户名',
+            trigger: 'blur'
+          },
+          {
+            validator: checkUser,
+            trigger: 'blur'
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: '请输入您的密码',
+            trigger: 'blur'
+          },
+          {
+            validator: validatePass,
+            trigger: 'blur'
+          }
+        ]
+      }
     }
   },
   mounted() {
