@@ -1,23 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/Home'
-import App from '@/App'
-import UserLogin from '@/views/UserLogin'
-import UserRegister from '@/views/UserRegister'
+
+import UserLogin from '@/views/login/UserLogin'
+import UserRegister from '@/views/register/UserRegister'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    component: App,
+    component: Home,
     meta: { title: '首页' }
   },
-  {
-    path: '/home',
-    component: Home,
-    meta: { title: '' }
-  },
+
   {
     path: '/about',
     name: 'About',
