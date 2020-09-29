@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Register from '@/components/Register'
+import Register from '@/components/register/Register'
 export default {
   name: 'UserRegister',
   components: {
