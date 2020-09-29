@@ -5,11 +5,11 @@
       <el-main
         style="background: #c0cee9;height: 300px;width: 300px;margin-left: auto;margin-right: auto"
       >
-        <el-form :rules="rule" ref="user" status-icon :model="user">
+        <el-form :rules="rule" status-icon :model="user" ref="user">
           <el-form-item prop="userName">
             <el-input
               placeholder="用户名"
-              auto-complete="on"
+              auto-complete="off"
               v-model="user.userName"
               clearable
             />
@@ -17,7 +17,7 @@
 
           <el-form-item prop="password">
             <el-input
-              auto-complete="on"
+              auto-complete="off"
               type="password"
               show-password
               placeholder="密码"
@@ -26,15 +26,16 @@
             />
           </el-form-item>
           <el-form-item>
-            <el-checkbox v-model="check">一周内自动登录</el-checkbox>
+            <el-checkbox v-model="check" :loading="logining"
+              >一周内自动登录</el-checkbox
+            >
           </el-form-item>
           <el-form-item>
             <el-button
-              :loading="logining"
-              @click="submit"
+              @click="submit('user')"
               :style="{ background: 'rgb(190, 200, 200)' }"
               style="margin-left: 20px"
-              >提交
+              >登录
             </el-button>
           </el-form-item>
         </el-form>
@@ -44,24 +45,21 @@
 </template>
 
 <script>
-import http from '@/data/http'
-
 export default {
   name: 'Login',
   data() {
-    const validatePass = (rule, value, callback) => {
-      if (value === '') {
+    let validatePass = (rule, value, callback) => {
+      if (!value) {
         callback(new Error('请输入密码'))
       } else {
-        if (this.user.password !== '') {
-          this.$refs.user.validateField('password')
-        }
         callback()
       }
     }
-    var checkUser = (rule, value, callback) => {
-      if (value === '') {
+    let checkUser = (rule, value, callback) => {
+      if (!value) {
         return callback(new Error('请输入您的用户名'))
+      } else {
+        callback()
       }
     }
     return {
@@ -75,7 +73,7 @@ export default {
       rule: {
         userName: [
           {
-            require: true,
+            required: true,
             message: '请输入您的用户名',
             trigger: 'blur'
           },
@@ -93,20 +91,26 @@ export default {
           {
             validator: validatePass,
             trigger: 'blur'
+          },
+          {
+            min: 6,
+            message: '长度最小为6',
+            trigger: 'blur'
           }
         ]
       }
     }
   },
-  mounted() {
-    const that = this
+  created() {
+    let that = this
     that.account()
   },
+  mounted() {},
   methods: {
     /**
      * 获取cookie
      */
-    getCookie: () => {
+    getCookie() {
       if (document.cookie.length > 0) {
         const arr = document.cookie.split('; ')
         for (let i = 0; i < arr.length; i++) {
@@ -125,7 +129,7 @@ export default {
     /**
      * 清除 cookie
      */
-    clearCookie: () => {
+    clearCookie() {
       this.setCookie('', '', -1) //修改2值都为空，天数为负1天就好了
     },
 
@@ -135,7 +139,7 @@ export default {
      * @param c_pwd 密码
      * @param c_day 更新时间
      */
-    setCookie: (c_name, c_pwd, c_day) => {
+    setCookie(c_name, c_pwd, c_day) {
       const exdate = new Date() //获取时间
       exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * c_day) //保存的天数
       document.cookie =
@@ -146,26 +150,72 @@ export default {
     /**
      * 登录
      */
-    submit: () => {
+    submit() {
       const that = this
-      that.$ref.user.validate(valid => {
-        if (valid) {
-          that.logining = true
-          if (that.check === true) {
-            that.setCookie(that.user.userName, that.user.password, 7)
-          } else {
-            that.clearCookie()
-          }
-          http
-            .fetchGet('/user/', {
-              userName: that.user.userName,
-              password: that.user.password
-            })
-            .then(res => {
-              console.log(res)
-            })
+      that.$refs.user.validate(async valid => {
+        if (!valid) return
+        let uData = {}
+        uData['userName'] = that.user.userName
+        uData['passWord'] = that.user.password
+        console.log(uData)
+        const loginData = JSON.stringify(uData)
+        that.logining = true
+        // 向后端请求数据 用$axios
+        await that
+          .$axios({
+            method: 'post',
+            // 请求url
+            url: 'http://localhost:8090/user/userLogin',
+            // 请求参数
+            data: loginData,
+            // 在请求头中添加一下内容
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              dataType: 'json'
+            }
+          })
+          .then(res => {
+            if (res.status === 200) {
+              // let h = that.$createElement
+              that.$message.success('登录成功')
+            }
+            if (res.status === 500) {
+              that.$message.error('密码错误,请重新登录')
+            }
+          })
+          .catch(() => {
+            that.$message.error('服务器错误，请联系管理员')
+          })
+        if (that.check === true) {
+          that.setCookie(that.user.userName, that.user.password)
+        } else {
+          that.clearCookie()
         }
       })
+
+      // this.user.validate(valid => {
+      //   if (valid) {
+      //     that.logining = true
+      //     if (that.check === true) {
+      //       that.setCookie(
+      //         that.user.userName,
+      //         that.user.password,
+      //         7
+      //       )
+      //     } else {
+      //       that.clearCookie()
+      //     }
+      //     http
+      //       .fetchPost('/user/userLogin', {
+      //         userName: that.user.userName,
+      //         password: that.user.password
+      //       })
+      //       .then(res => {
+      //         console.log(res)
+      //       })
+      //   }
+      // })
     },
     account() {
       if (document.cookie.length <= 0) {
