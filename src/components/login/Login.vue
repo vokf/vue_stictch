@@ -48,6 +48,7 @@
 export default {
   name: 'Login',
   data() {
+    //自定义验证密码
     let validatePass = (rule, value, callback) => {
       if (!value) {
         callback(new Error('请输入密码'))
@@ -55,6 +56,7 @@ export default {
         callback()
       }
     }
+    //自定义验证用户名
     let checkUser = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('请输入您的用户名'))
@@ -72,31 +74,13 @@ export default {
       check: false,
       rule: {
         userName: [
-          {
-            required: true,
-            message: '请输入您的用户名',
-            trigger: 'blur'
-          },
-          {
-            validator: checkUser,
-            trigger: 'blur'
-          }
+          { required: true, message: '请输入您的用户名', trigger: 'blur' },
+          { validator: checkUser, trigger: 'blur' }
         ],
         password: [
-          {
-            required: true,
-            message: '请输入您的密码',
-            trigger: 'blur'
-          },
-          {
-            validator: validatePass,
-            trigger: 'blur'
-          },
-          {
-            min: 6,
-            message: '长度最小为6',
-            trigger: 'blur'
-          }
+          { required: true, message: '请输入您的密码', trigger: 'blur' },
+          { validator: validatePass, trigger: 'blur' },
+          { min: 6, message: '长度最小为6', trigger: 'blur' }
         ]
       }
     }
