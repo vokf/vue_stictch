@@ -86,14 +86,14 @@ export default {
         if (value.match(/0?(13|14|15|17|18|19)[0-9]{9}/)) {
           callback()
         } else {
-          return new Error('手机号输入不正确')
+          return new Error('目前只支持中国大陆的手机号码')
         }
       }
     }
     // 匹配邮箱
     let checkEmail = (rule, value, callback) => {
       if (!value) {
-        return new Error('请输入邮箱')
+        return callback(Error('请输入邮箱'))
       } else {
         if (
           value.match(
@@ -104,6 +104,20 @@ export default {
         } else {
           return new Error('邮箱格式不正确')
         }
+      }
+    }
+    let checkUseName = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('必填'))
+      } else {
+        this.$axios.get('', { params: value }).then(res => {
+          if (res.data === 'true') {
+            callback()
+          }
+          if (res.data === 'false') {
+            callback(new Error('该用户名已存在'))
+          }
+        })
       }
     }
 
@@ -118,6 +132,7 @@ export default {
       rules: {
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
+          { validator: checkUseName, trigger: 'blur' },
           { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' }
         ],
         password: [
@@ -150,31 +165,47 @@ export default {
     register(form) {
       let _this = this
       let userData = {}
-      console.log(_this.user.userName)
-
-      const loginData = JSON.stringify(userData)
-      _this.$refs[form].validate(valid => {
-        if (!valid) return
+      userData['userName'] = _this.user.userName
+      userData['passWord'] = _this.user.password
+      userData['phone'] = _this.user.phoneNum
+      userData['email'] = _this.user.email
+      const registerData = JSON.stringify(userData)
+      console.log(registerData)
+      _this.$refs[form].validate(async valid => {
+        if (!valid) return new Error('无法通过验证')
+        else {
+          await _this
+            .$axios({
+              method: 'post',
+              url: '/user/register',
+              data: registerData
+            })
+            .then(res => {
+              console.log(res)
+            })
+            .catch()
+        }
       })
-      _this
-        .$axios({
-          method: 'post',
-          // 请求url
-          url: 'http://localhost:8090/user/userLogin',
-          // 请求参数
-          data: loginData,
-          // 在请求头中添加一下内容
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            dataType: 'json'
-          }
-        })
-        .then(res => {
-          console.log(res)
-        })
+      // _this
+      //   .$axios({
+      //     method: 'post',
+      //     // 请求url
+      //     url: 'http://localhost:8090/user/userLogin',
+      //     // 请求参数
+      //     data: loginData,
+      //     // 在请求头中添加一下内容
+      //     headers: {
+      //       Accept: 'application/json',
+      //       'Content-Type': 'application/json',
+      //       dataType: 'json'
+      //     }
+      //   })
+      //   .then(res => {
+      //     console.log(res)
+      //   })
     },
-    handlePaste() {}
+    handlePaste() {},
+    checkUser() {}
   }
 }
 </script>
