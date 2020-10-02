@@ -110,14 +110,20 @@ export default {
       if (value === '') {
         callback(new Error('必填'))
       } else {
-        this.$axios.get('', { params: value }).then(res => {
-          if (res.data === 'true') {
-            callback()
-          }
-          if (res.data === 'false') {
-            callback(new Error('该用户名已存在'))
-          }
-        })
+        this.$axios
+          .get('', {
+            params: {
+              userName: value
+            }
+          })
+          .then(res => {
+            if (res.data === 'true') {
+              callback()
+            }
+            if (res.data === 'false') {
+              callback(new Error('该用户名已存在'))
+            }
+          })
       }
     }
 
@@ -141,7 +147,7 @@ export default {
           { validator: checkPass, trigger: 'blur' }
         ],
         confirmPass: [
-          { require: true, message: '请确认您的密码', trigger: 'blur' },
+          { required: true, message: '请确认您的密码', trigger: 'blur' },
           { validator: checkConfirmPass, trigger: 'blur' }
         ],
         phoneNum: [
@@ -210,4 +216,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.el-form {
+  height: 500px;
+  width: 300px;
+}
+</style>
