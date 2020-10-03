@@ -9,37 +9,40 @@
               v-model="user.userName"
               ref="userName"
               placeholder="用户名"
-            ></el-input>
+            />
           </el-form-item>
           <el-form-item prop="password">
             <el-input
+              type="password"
+              show-password
               @paste.native.capture.prevent="handlePaste"
               v-model="user.password"
               ref="password"
               placeholder="密码"
-            ></el-input>
+            />
           </el-form-item>
           <el-form-item prop="confirmPass">
             <el-input
+              show-password
+              type="password"
               @paste.native.capture.prevent="handlePaste"
               v-model="user.confirmPass"
               placeholder="确认密码"
-            ></el-input>
+            />
           </el-form-item>
           <el-form-item prop="phoneNum">
             <el-input
               v-model="user.phoneNum"
               @paste.native.capture.prevent="handlePaste"
               placeholder="电话号码"
-            >
-            </el-input>
+            />
           </el-form-item>
           <el-form-item prop="email">
             <el-input
               @paste.native.capture.prevent="handlePaste"
               placeholder="邮箱"
               v-model="user.email"
-            ></el-input>
+            />
           </el-form-item>
           <el-button @click="register('user')">注册</el-button>
         </el-form>
@@ -107,20 +110,22 @@ export default {
       }
     }
     let checkUseName = (rule, value, callback) => {
-      if (value === '') {
+      if (value.length < 6) {
+        callback(new Error('字符必须大于6位'))
+      } else if (value === '') {
         callback(new Error('必填'))
       } else {
         this.$axios
-          .get('', {
+          .get('http://localhost:8090/user/findUserByName', {
             params: {
               userName: value
             }
           })
           .then(res => {
-            if (res.data === 'true') {
+            if (res.status === 200) {
               callback()
             }
-            if (res.data === 'false') {
+            if (res.status === 500) {
               callback(new Error('该用户名已存在'))
             }
           })
@@ -139,7 +144,7 @@ export default {
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { validator: checkUseName, trigger: 'blur' },
-          { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' }
+          { min: 6, message: '长度在 6 到 10 个字符', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
