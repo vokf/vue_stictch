@@ -4,6 +4,7 @@ import Home from '@/views/Home'
 
 import UserLogin from '@/views/login/UserLogin'
 import UserRegister from '@/views/register/UserRegister'
+import User from '@/views/user/User'
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,13 @@ const routes = [
     component: UserRegister,
     meta: {
       title: '注册'
+    }
+  },
+  {
+    path: '/user',
+    component: User,
+    meta: {
+      title: '用户'
     }
   }
 ]
