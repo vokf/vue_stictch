@@ -1,5 +1,28 @@
 <template>
-  <div class="hello"></div>
+  <div class="">
+    <div>
+      <div>
+        <el-container style="background: #c0cee9">
+          <el-header height="50px">
+            <el-breadcrumb separator-class="el-icon-arrow-right" class="bread">
+              <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+              <el-breadcrumb-item><a href=""></a>用户</el-breadcrumb-item>
+              <el-breadcrumb-item>修改用户 </el-breadcrumb-item>
+              <el-breadcrumb-item>用户</el-breadcrumb-item>
+            </el-breadcrumb>
+          </el-header>
+          <el-main></el-main>
+        </el-container>
+      </div>
+      <div style="background: #ff6c6c">
+        <el-container>
+          <el-header height="50px">
+            <el-input v-model="search" size="80"></el-input>
+          </el-header>
+        </el-container>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -7,9 +30,27 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      search: '',
+      user: {
+        userId: 0,
+        userName: ''
+      }
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.bread {
+  position: fixed;
+  right: 200px;
+  top: 20px;
+  padding: {
+    top: 20px;
+  }
+}
+</style>
