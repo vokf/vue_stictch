@@ -14,6 +14,13 @@ const routes = [
     component: Home,
     meta: { title: '首页' }
   },
+  {
+    path: '/index',
+    component: Home,
+    meta: {
+      title: '首页'
+    }
+  },
 
   {
     path: '/about',
