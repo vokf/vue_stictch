@@ -2,9 +2,11 @@
   <div>
     <div>
       <div>
-        <div class="center">
-          <div>dfijdfi</div>
-          <el-table> </el-table>
+        <div class="entire">
+          <el-header height="100px" style="background: #b6beb2">
+            <div class="right">欢迎{{}}</div>
+          </el-header>
+          <el-main style="background: #50bfbf"> gg</el-main>
         </div>
       </div>
     </div>
@@ -13,17 +15,51 @@
 
 <script>
 export default {
-  name: 'userDetail',
+  name: 'User',
   data() {
     return {
-      user: {},
+      // 用户信息
+      user: {
+        userName: '',
+        password: '',
+        age: 0,
+        gender: '',
+        phone: '',
+        companyName: '',
+        companyLocation: '',
+        email: '',
+        special: '',
+        roleName: ''
+      },
       userList: []
     }
+  },
+  created() {
+    let that = this
+    that.$axios({
+      url: '',
+      params: that.$router.query,
+      method: 'GET'
+    })
   }
 }
 </script>
 
 <style scoped lang="scss">
-.center {
+.entire {
+  padding: 0;
+  margin: 0;
+}
+
+.right {
+  font: {
+    weight: bolder;
+    size: 30px;
+  }
+  padding: {
+    top: 20px;
+  }
+  position: fixed;
+  left: 900px;
 }
 </style>
