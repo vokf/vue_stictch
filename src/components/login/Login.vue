@@ -47,6 +47,14 @@
 <script>
 export default {
   name: 'Login',
+  props: {
+    userId: {
+      type: Number
+    },
+    userName: {
+      type: String
+    }
+  },
   data() {
     //自定义验证密码
     let validatePass = (rule, value, callback) => {
@@ -71,6 +79,8 @@ export default {
         userName: '',
         password: ''
       },
+      id: this.userId,
+
       check: false,
       rule: {
         userName: [
@@ -163,6 +173,13 @@ export default {
             if (res.status === 200) {
               // let h = that.$createElement
               that.$message.success('登录成功')
+              that.$emit('id', res.data.obj)
+              that.$router.push({
+                path: '/index',
+                query: {
+                  userId: res.data.obj
+                }
+              })
             }
             if (res.status === 500) {
               that.$message.error('密码错误,请重新登录')
