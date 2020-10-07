@@ -6,6 +6,7 @@ import UserLogin from '@/views/login/UserLogin'
 import UserRegister from '@/views/register/UserRegister'
 import User from '@/views/user/User'
 
+import About from '@/views/About.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -55,6 +56,10 @@ const routes = [
     meta: {
       title: '用户'
     }
+  },
+  {
+    path: '/test',
+    component: About
   }
 ]
 
