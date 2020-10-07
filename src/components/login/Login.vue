@@ -27,8 +27,8 @@
           </el-form-item>
           <el-form-item>
             <el-checkbox v-model="check" :loading="logining"
-              >一周内自动登录</el-checkbox
-            >
+              >一周内自动登录
+            </el-checkbox>
           </el-form-item>
           <el-form-item>
             <el-button
@@ -45,13 +45,14 @@
 </template>
 
 <script>
+import { mapMutations, mapActions } from 'vuex'
 export default {
   name: 'Login',
   props: {
-    userId: {
+    theUserId: {
       type: Number
     },
-    userName: {
+    theUserName: {
       type: String
     }
   },
@@ -101,6 +102,8 @@ export default {
   },
   mounted() {},
   methods: {
+    ...mapActions(['upUserId']),
+    ...mapMutations(['updateUserId']),
     /**
      * 获取cookie
      */
@@ -173,13 +176,20 @@ export default {
             if (res.status === 200) {
               // let h = that.$createElement
               that.$message.success('登录成功')
-              that.$emit('id', res.data.obj)
+
               that.$router.push({
                 path: '/index',
                 query: {
                   userId: res.data.obj
                 }
               })
+              // that.$store.commit('updateUserId', {
+              //   id: res.data.obj
+              // })
+              // that.$store.dispatch('upUserId', {
+              //   id: res.data.obj
+              // })
+              that.updateUserId({ id: res.data.obj })
             }
             if (res.status === 500) {
               that.$message.error('密码错误,请重新登录')
@@ -194,29 +204,6 @@ export default {
           that.clearCookie()
         }
       })
-
-      // this.user.validate(valid => {
-      //   if (valid) {
-      //     that.logining = true
-      //     if (that.check === true) {
-      //       that.setCookie(
-      //         that.user.userName,
-      //         that.user.password,
-      //         7
-      //       )
-      //     } else {
-      //       that.clearCookie()
-      //     }
-      //     http
-      //       .fetchPost('/user/userLogin', {
-      //         userName: that.user.userName,
-      //         password: that.user.password
-      //       })
-      //       .then(res => {
-      //         console.log(res)
-      //       })
-      //   }
-      // })
     },
     account() {
       if (document.cookie.length <= 0) {
