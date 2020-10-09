@@ -37,11 +37,7 @@ export default {
   },
   data() {
     return {
-      search: '',
-      user: {
-        userId: 0,
-        userName: ''
-      }
+      search: ''
     }
   }
 }
