@@ -99,7 +99,9 @@ export default {
   created() {
     let that = this
     that.account()
+    localStorage.removeItem('store')
   },
+
   mounted() {},
   methods: {
     ...mapActions(['upUserId']),
@@ -183,12 +185,7 @@ export default {
                   userId: res.data.obj
                 }
               })
-              // that.$store.commit('updateUserId', {
-              //   id: res.data.obj
-              // })
-              // that.$store.dispatch('upUserId', {
-              //   id: res.data.obj
-              // })
+
               that.updateUserId({ id: res.data.obj })
             }
             if (res.status === 500) {
