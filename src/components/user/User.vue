@@ -4,7 +4,7 @@
       <div>
         <div class="entire">
           <el-header height="100px" style="background: #b6beb2">
-            <div class="right">欢迎</div>
+            <div class="right">欢迎{{ userName }}</div>
           </el-header>
           <el-main style="background: #50bfbf"></el-main>
         </div>
@@ -14,12 +14,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'User',
   data() {
     return {
+      user: {
+        userName: '',
+        age: 0,
+        phone: '',
+        gender: '',
+        companyName: '',
+        companyLocation: '',
+        email: ''
+      },
       userList: []
     }
   },
@@ -40,8 +49,22 @@ export default {
         }
       })
       .then(res => {
-        let newVar = (that.userList = res.data)
-        console.log(newVar)
+        let s = (that.userList = res.data)
+
+        for (let a = 0; a < s.length; a++) {
+          that.getUser(
+            {
+              userName: s[a].userName,
+              age: s[a].age,
+              phone: s[a].phone,
+              gender: s[a].gender,
+              companyName: s[a].companyName,
+              companyLocation: s[a].companyLocation,
+              email: s[a].email
+            },
+            {}
+          )
+        }
       })
   },
   computed: {
@@ -57,7 +80,9 @@ export default {
       'special'
     ])
   },
-  methods: {}
+  methods: {
+    ...mapMutations(['getUser'])
+  }
 }
 </script>
 
