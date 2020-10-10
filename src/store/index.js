@@ -37,6 +37,15 @@ export default new Vuex.Store({
     },
     change(state, pl) {
       state.userId += pl.num
+    },
+    getUser(state, info) {
+      state.userName = info.userName
+      state.age = info.age
+      state.phone = info.phone
+      state.gender = info.gender
+      state.companyName = info.companyName
+      state.companyLocation = info.companyLocation
+      state.email = info.email
     }
   },
   actions: {
