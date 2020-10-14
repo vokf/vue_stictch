@@ -32,7 +32,7 @@
           </el-form-item>
           <el-form-item>
             <el-button
-              @click="submit('user')"
+              @click="this.submit('user')"
               :style="{ background: 'rgb(190, 200, 200)' }"
               style="margin-left: 20px"
               >登录
@@ -46,6 +46,7 @@
 
 <script>
 import { mapMutations, mapActions } from 'vuex'
+export function login() {}
 export default {
   name: 'Login',
   props: {
