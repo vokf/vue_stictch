@@ -4,6 +4,7 @@
       <div>
         <div>
           <Login />
+          <div><el-button></el-button></div>
         </div>
       </div>
     </div>
@@ -17,7 +18,12 @@ export default {
   components: {
     Login
   },
-  name: 'UserLogin'
+  name: 'UserLogin',
+  methods: {
+    login() {
+      console.log('login能打印吗')
+    }
+  }
 }
 </script>
 
