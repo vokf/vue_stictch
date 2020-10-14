@@ -3,7 +3,11 @@
     <div>
       <div>
         <el-form ref="user" :model="user" status-icon :rules="rules">
-          <el-form-item prop="userName">
+          <el-form-item
+            prop="userName"
+            :label-width="labelWidth"
+            label="用户名:"
+          >
             <el-input
               @paste.native.capture.prevent="handlePaste"
               v-model="user.userName"
@@ -11,7 +15,7 @@
               placeholder="用户名"
             />
           </el-form-item>
-          <el-form-item prop="password">
+          <el-form-item prop="password" :label-width="labelWidth" label="密码:">
             <el-input
               type="password"
               show-password
@@ -21,7 +25,11 @@
               placeholder="密码"
             />
           </el-form-item>
-          <el-form-item prop="confirmPass">
+          <el-form-item
+            prop="confirmPass"
+            :label-width="labelWidth"
+            label="确认密码:"
+          >
             <el-input
               show-password
               type="password"
@@ -30,14 +38,18 @@
               placeholder="确认密码"
             />
           </el-form-item>
-          <el-form-item prop="phoneNum">
+          <el-form-item
+            prop="phoneNum"
+            :label-width="labelWidth"
+            label="电话号码:"
+          >
             <el-input
               v-model="user.phoneNum"
               @paste.native.capture.prevent="handlePaste"
               placeholder="电话号码"
             />
           </el-form-item>
-          <el-form-item prop="email">
+          <el-form-item prop="email" :label-width="labelWidth" label="邮箱:">
             <el-input
               @paste.native.capture.prevent="handlePaste"
               placeholder="邮箱"
@@ -133,6 +145,7 @@ export default {
     }
 
     return {
+      labelWidth: '120px',
       user: {
         userName: '', //用户名
         password: '', //密码
