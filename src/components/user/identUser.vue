@@ -41,7 +41,7 @@
               </el-form>
               <div slot="footer" class="footer">
                 <el-button>取 消</el-button>
-                <el-button type="primary">确 定</el-button>
+                <el-button type="primary" @click="submit()">确 定</el-button>
               </div>
             </div>
           </el-main>
@@ -67,7 +67,10 @@ export default {
   },
   methods: {
     success() {},
-
+    submit() {
+      let that = this
+      that.$axios({ method: 'get', params: { id: '' } })
+    },
     handlePreview(file) {
       this.imageURL = file.url
     }
@@ -104,11 +107,9 @@ export default {
   position: relative;
   overflow: hidden;
 }
-
 .avatar-uploader:hover {
   border-color: #409eff;
 }
-
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
