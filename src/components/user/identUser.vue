@@ -26,16 +26,23 @@
                 </el-form-item>
                 <el-form-item label="上传附件:" :label-width="width">
                   <el-upload
+                    list-type="picture"
+                    :show-file-list="true"
+                    :before-upload="beforeAvatarUpload"
+                    :on-exceed="handleExceed"
                     :on-preview="handlePreview"
                     :on-success="success"
                     name="upfile"
                     class="avatar-uploader"
                     action="http://localhost:8090/uploadImage"
                     multiple
-                    :show-file-list="fileList"
+                    :on-error="uploadFileError"
+                    :limit="3"
                   >
-                    <img :src="imageURL" v-if="imageURL" class="avatar" />
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <el-button size="small" type="primary">点击上传</el-button>
+                    <div slot="tip" class="el-upload__tip">
+                      只能上传jpg/png文件，且不超过2MB
+                    </div>
                   </el-upload>
                 </el-form-item>
               </el-form>
@@ -66,13 +73,42 @@ export default {
     }
   },
   methods: {
-    success() {},
+    success(res) {
+      if (res.state === 'SUCCESS') {
+        this.$message.success('上传成功')
+        let url = res.url
+        this.imageURL = url.toString()
+      }
+    },
     submit() {
       let that = this
       that.$axios({ method: 'get', params: { id: '' } })
     },
+    uploadFileError() {
+      this.$message.error('上传失败！')
+    },
     handlePreview(file) {
+      // for (let i = 0; i < this.fileList.length; i++) {}
       this.imageURL = file.url
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 3 个文件，本次选择了 ${
+          files.length
+        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+      )
     }
   }
 }
@@ -89,27 +125,10 @@ export default {
   }
 }
 
-.avatar-uploader {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
 .avatar-uploader:hover {
   border-color: #409eff;
 }
+
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
