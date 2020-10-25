@@ -9,6 +9,7 @@
             label="用户名:"
           >
             <el-input
+              prefix-icon="el-icon-user"
               @paste.native.capture.prevent="handlePaste"
               v-model="user.userName"
               ref="userName"
@@ -17,6 +18,7 @@
           </el-form-item>
           <el-form-item prop="password" :label-width="labelWidth" label="密码:">
             <el-input
+              prefix-icon="el-icon-key"
               type="password"
               show-password
               @paste.native.capture.prevent="handlePaste"
@@ -31,6 +33,7 @@
             label="确认密码:"
           >
             <el-input
+              prefix-icon="el-icon-key"
               show-password
               type="password"
               @paste.native.capture.prevent="handlePaste"
@@ -122,10 +125,10 @@ export default {
       }
     }
     let checkUseName = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('字符必须大于6位'))
-      } else if (value === '') {
-        callback(new Error('必填'))
+      if (value === '') {
+        callback(new Error('请输入用户名'))
+      } else if (value.length < 6) {
+        callback(new Error(' 字符必须大于6位 '))
       } else {
         this.$axios
           .get('http://localhost:8090/user/findUserByName', {
@@ -201,8 +204,13 @@ export default {
           await _this
             .$axios({
               method: 'post',
-              url: '/user/register',
-              data: registerData
+              url: 'http://localhost:8090/user/register',
+              data: registerData,
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                dataType: 'json'
+              }
             })
             .then(res => {
               console.log(res)
