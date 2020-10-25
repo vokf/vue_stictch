@@ -1,12 +1,14 @@
 /* 改变主题色变量 */
-$--color-primary: #50bfbf;
+$--color-primary: mix(#5c56b6, #8e0e0e,70%) !default;
 
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @import "~element-ui/packages/theme-chalk/src/index";
 
-$--color-success: #45be09 !default;
+$--color-success: mix(#45be09, #ceeec6,50%) !default;
 $--color-warning: #e6a23c !default;
-$--color-danger: #ff6c6c !default;
-$--color-info: #495469 !default;
+$--color-danger: mix(#ee8080, #f50000,70%) !default;
+$--color-info: #6278a1 !default;
+
+
