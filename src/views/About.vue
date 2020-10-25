@@ -2,7 +2,7 @@
   <div class="about">
     <h1>This is an about page</h1>
     <h2>{{ userId }}</h2>
-    <button @click="change({ num: 8 })">fff</button>
+    <button>fff</button>
   </div>
 </template>
 <script>
