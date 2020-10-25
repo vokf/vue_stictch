@@ -32,7 +32,7 @@
           </el-form-item>
           <el-form-item>
             <el-button
-              @click="this.submit('user')"
+              @click="submit('user')"
               :style="{ background: 'rgb(190, 200, 200)' }"
               style="margin-left: 20px"
               >登录
