@@ -2,30 +2,40 @@
   <div>
     <div>
       <div>
-        <div class="entire">
-          <el-header height="100px" style="background: #b6beb2">
-            <div class="right">欢迎{{ userName }}</div>
-          </el-header>
-          <el-main style="background: #50bfbf"></el-main>
-        </div>
         <el-main>
-          <div class="show">
-            <div>用户名:</div>
-            <div class="one">gg</div>
-            <div>年龄:</div>
-            <div class="one">18</div>
-            <div>性别:</div>
-            <div class="one">hh</div>
-            <div>联系电话</div>
-            <div class="one">2222</div>
-            <div>邮箱</div>
-            <div class="one">ll</div>
-            <div>爱好</div>
-            <div class="one">
-              lu试试来到面对昆明昆明聪明的 差点就肯定很精彩的
+          <div class="show" v-for="(item, index) in userList" :key="index">
+            <div v-show="show">
+              <h3>个人资料</h3>
+
+              <div>用户名:</div>
+              <div class="one">{{ item.username }}</div>
+
+              <div>年龄:</div>
+              <div class="one">
+                <span v-if="item.age == null">
+                  <span>无</span>
+                </span>
+                <!--              //{{ item.age }}-->
+              </div>
+
+              <div>性别:</div>
+              <div class="one">
+                <span v-if="item.gender == null">
+                  <span>无</span>
+                </span>
+
+                <span v-else>{{ item.gender }}</span>
+              </div>
+              <div>联系电话</div>
+              <div class="one">{{ item.phone }}</div>
+              <div>邮箱</div>
+              <div class="one">{{ item.email }}</div>
+              <div>爱好</div>
+              <div class="one">
+                {{ item.special }}
+              </div>
             </div>
-            <el-button @click="dialogFormVisible = true">修改信息</el-button>
-            <el-dialog title="修改信息" :visible.sync="dialogFormVisible">
+            <div v-show="bushow" class="bushow">
               <el-form :model="user" :rules="rules" status-icon>
                 <el-form-item
                   label="用户名:"
@@ -92,13 +102,80 @@
                   </el-upload>
                 </el-form-item>
               </el-form>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false"
-                  >确 定</el-button
-                >
-              </div>
-            </el-dialog>
+            </div>
+            <el-button @click="click">修改信息</el-button>
+            <!--            <el-dialog title="修改信息" :visible.sync="dialogFormVisible">-->
+            <!--              <el-form :model="user" :rules="rules" status-icon>-->
+            <!--                <el-form-item-->
+            <!--                  label="用户名:"-->
+            <!--                  :label-width="labelWidth"-->
+            <!--                  prop="userName"-->
+            <!--                >-->
+            <!--                  <el-input-->
+            <!--                    v-model="user.userName"-->
+            <!--                    autocomplete="off"-->
+            <!--                    placeholder="修改您的用户名"-->
+            <!--                  />-->
+            <!--                </el-form-item>-->
+            <!--                <el-form-item-->
+            <!--                  label="年龄:"-->
+            <!--                  :label-width="labelWidth"-->
+            <!--                  prop="age"-->
+            <!--                >-->
+            <!--                  <el-input-->
+            <!--                    v-model="user.age"-->
+            <!--                    autocomplete="off"-->
+            <!--                    placeholder="您的年龄"-->
+            <!--                  ></el-input>-->
+            <!--                </el-form-item>-->
+            <!--                <el-form-item-->
+            <!--                  label="性别:"-->
+            <!--                  :label-width="labelWidth"-->
+            <!--                  prop="gender"-->
+            <!--                >-->
+            <!--                  <el-select v-model="user.gender">-->
+            <!--                    <el-option value="男" label="男" />-->
+            <!--                    <el-option value="女" label="女" />-->
+            <!--                  </el-select>-->
+            <!--                </el-form-item>-->
+            <!--                <el-form-item-->
+            <!--                  label="联系电话:"-->
+            <!--                  :label-width="labelWidth"-->
+            <!--                  prop="phoneNum"-->
+            <!--                >-->
+            <!--                  <el-input-->
+            <!--                    v-model="user.phoneNum"-->
+            <!--                    autocomplete="off"-->
+            <!--                    placeholder="您的联系电话"-->
+            <!--                  ></el-input>-->
+            <!--                </el-form-item>-->
+            <!--                <el-form-item-->
+            <!--                  label="电子邮箱:"-->
+            <!--                  :label-width="labelWidth"-->
+            <!--                  prop="email"-->
+            <!--                >-->
+            <!--                  <el-input-->
+            <!--                    v-model="user.email"-->
+            <!--                    placeholder="您的电子邮箱"-->
+            <!--                    autocomplete="off"-->
+            <!--                  ></el-input>-->
+            <!--                </el-form-item>-->
+            <!--                <el-form-item label="上传头像:" :label-width="labelWidth">-->
+            <!--                  <el-upload-->
+            <!--                    class="avatar-uploader"-->
+            <!--                    action=""-->
+            <!--                    :show-file-list="false"-->
+            <!--                  >-->
+            <!--                    <img :src="imageURL" v-if="imageURL" class="avatar" />-->
+            <!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+            <!--                  </el-upload>-->
+            <!--                </el-form-item>-->
+            <!--              </el-form>-->
+            <!--              <div slot="footer" class="dialog-footer">-->
+            <!--                <el-button @click="dialogFormVisible = false">取 消</el-button>-->
+            <!--                <el-button type="primary" @click="click">确 定</el-button>-->
+            <!--              </div>-->
+            <!--            </el-dialog>-->
           </div>
         </el-main>
       </div>
@@ -163,6 +240,8 @@ export default {
       }
     }
     return {
+      show: true,
+      bushow: false,
       userList: [],
       user: {
         userName: '',
@@ -203,6 +282,7 @@ export default {
       }
     }
   },
+  components: {},
   created() {
     let that = this
     that
@@ -219,49 +299,33 @@ export default {
         }
       })
       .then(res => {
-        let s = (that.userList = res.data)
-
-        for (let a = 0; a < s.length; a++) {
-          that.getUser(
-            {
-              userName: s[a].userName,
-              age: s[a].age,
-              phone: s[a].phone,
-              gender: s[a].gender,
-              companyName: s[a].companyName,
-              companyLocation: s[a].companyLocation,
-              email: s[a].email
-            },
-            {}
-          )
-        }
+        that.userList = res.data
       })
   },
   computed: {
-    ...mapState([
-      'userId',
-      'userName',
-      'age',
-      'gender',
-      'phone',
-      'companyName',
-      'companyLocation',
-      'email',
-      'special'
-    ])
+    ...mapState(['userId', 'userName'])
   },
   methods: {
-    ...mapMutations(['getUser'])
+    ...mapMutations(['getUser']),
+    click() {
+      this.bushow = true
+      this.show = false
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.entire {
-  padding: 0;
-  margin: 0;
+.bushow {
+  .el-form-item {
+    position: relative;
+    top: 50px;
+    right: 60px;
+    padding: {
+      top: 10px;
+    }
+  }
 }
-
 .right {
   font: {
     weight: bolder;
@@ -275,9 +339,11 @@ export default {
 }
 
 .show {
+  position: relative;
+  right: 156px;
   letter-spacing: 3px;
   line-height: 40px;
-  border: 1px solid silver;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   margin: {
     left: auto;
     right: auto;
@@ -289,8 +355,13 @@ export default {
   padding: {
     left: 50px;
   }
-  height: 500px;
+  height: 600px;
   width: 500px;
+  .el-button {
+    position: relative;
+    bottom: 420px;
+    left: 400px;
+  }
 }
 
 .one {
