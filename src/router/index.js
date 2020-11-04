@@ -4,9 +4,17 @@ import Home from '@/views/Home'
 
 import UserLogin from '@/views/login/UserLogin'
 import UserRegister from '@/views/register/UserRegister'
-import User from '@/views/user/User'
+import User from '@/components/user/User'
 
 import About from '@/views/About.vue'
+import updateUser from '@/components/user/updateUser'
+import PublishJob from '@/views/job/PublishJob'
+import identification from '@/views/user/identification'
+import publishArticle from '@/views/article/publishArticle'
+import allPublishJob from '@/views/job/allPublishJob'
+import Test from '@/views/Test'
+import addArticle from '@/components/article/addArticle'
+import Info from '@/components/user/Info'
 Vue.use(VueRouter)
 
 const routes = [
@@ -52,14 +60,80 @@ const routes = [
   },
   {
     path: '/user',
-    component: User,
+    component: Info,
     meta: {
       title: '用户'
+    },
+    children: [
+      {
+        path: 'update',
+        component: updateUser,
+        meta: {
+          title: '修改'
+        }
+      },
+      {
+        path: 'info',
+        component: User,
+        meta: {
+          title: '用户信息'
+        }
+      }
+    ]
+  },
+
+  {
+    path: '/update',
+    name: 'updateUser',
+    component: updateUser,
+    meta: {
+      title: '修改'
+    }
+  },
+
+  {
+    path: '/test', //测试
+    component: About
+  },
+  {
+    path: '/publishJob',
+    component: PublishJob,
+    meta: {
+      title: '发布求职'
     }
   },
   {
-    path: '/test',
-    component: About
+    path: '/identify',
+    component: identification,
+    meta: {
+      title: '企业用户认证'
+    }
+  },
+  {
+    path: '/publishArticle',
+    component: publishArticle,
+    meta: {
+      title: '发布文章'
+    }
+  },
+  {
+    path: '/allPublishJob',
+    component: allPublishJob,
+    meta: {
+      title: '发布的求职通知'
+    }
+  },
+  {
+    path: '/tt', //测试
+    component: Test,
+    meta: { title: '测试' }
+  },
+  {
+    path: '/addArticle',
+    component: addArticle,
+    meta: {
+      title: '添加文章'
+    }
   }
 ]
 
