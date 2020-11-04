@@ -1,63 +1,84 @@
 <template>
-  <div class="">
+  <div class="this">
     <div>
-      <div>
-        <el-container style="background: #3f4041">
-          <el-header height="50px">
-            <el-breadcrumb separator="/" class="bread">
-              <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-              <el-breadcrumb-item><a href=""></a>用户</el-breadcrumb-item>
-              <el-breadcrumb-item>修改用户 </el-breadcrumb-item>
-              <el-breadcrumb-item>用户</el-breadcrumb-item>
-            </el-breadcrumb>
-          </el-header>
-          <el-main></el-main>
-        </el-container>
-      </div>
-      <div style="background: #ff6c6c">
-        <el-container>
-          <el-header height="50px"> </el-header>
-        </el-container>
-      </div>
-      <div style="background: #e6a23c;height: 100px">
+      <div style="">
         <el-container class="input">
-          <el-input placeholder="请输入" v-model="search" />
-          <el-button type="primary">搜索</el-button>
+          <el-input placeholder="请输入" v-model="searchContent" />
+          <el-button type="primary" @click="searchMethod">搜索</el-button>
         </el-container>
+      </div>
+      <div>
+        <index />
+      </div>
+      <div>
+        <cont v-bind:info="list" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations, mapGetters } from 'vuex'
+import Index from '@/components/Index'
+import cont from '@/components/index/contentArticle'
+
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  created() {
+    this.$axios({
+      url: '/article/allArticle',
+      method: 'get'
+    }).then(res => {
+      this.list = res.data
+    })
   },
   data() {
     return {
-      search: ''
+      searchContent: '',
+      list: []
     }
+  },
+  computed: {
+    ...mapState(['userId', 'userName']),
+    ...mapGetters([])
+  },
+  methods: {
+    ...mapMutations(['getUser']),
+    searchMethod() {
+      let that = this
+      that
+        .$axios({
+          baseURL: 'http://localhost:8090',
+          url: '',
+          method: 'get',
+          params: { search: that.searchContent }
+        })
+        .then(res => {
+          res.data = that.list
+        })
+    }
+  },
+  components: {
+    index: Index,
+    cont: cont
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.bread {
-  position: fixed;
-  right: 200px;
-  top: 20px;
-  padding: {
-    top: 20px;
-  }
-}
 .input {
   width: 600px;
   padding: {
     left: 200px;
     top: 20px;
   }
+}
+
+.this {
+  overflow: hidden;
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
 }
 </style>
