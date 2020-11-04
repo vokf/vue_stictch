@@ -15,45 +15,41 @@ export default new Vuex.Store({
   state: {
     userId: 1,
     userName: '',
-    age: 0,
-    gender: '',
-    phone: '',
-    companyName: '',
-    companyLocation: '',
-    email: '',
-    special: '',
-    roleName: ''
+    roleName: '',
+    publishId: 1,
+    userInfo: []
   },
   //methods
   mutations: {
     updateUserId(state, num) {
       state.userId = num.id
-      // localStorage.setItem('userId', state.userId)
+      state.userName = num.username
 
       console.log('mutation之后呢' + state.userId)
     },
-    setUserId(state, info) {
-      state.userId = info.userId
-    },
-    change(state, pl) {
-      state.userId += pl.num
-    },
+
     getUser(state, info) {
       state.userName = info.userName
-      state.age = info.age
-      state.phone = info.phone
-      state.gender = info.gender
-      state.companyName = info.companyName
-      state.companyLocation = info.companyLocation
-      state.email = info.email
+    },
+    changePublishId(state, info) {
+      state.publishId = info.publishId
     }
   },
   actions: {
-    async realUpdateByAsyncId({ commit }) {
-      await this.$axios('', {})
-      commit('setUserId')
+    async getUserName({ commit }) {
+      await this.$axios({
+        url: '/user/findUserById',
+        params: { id: commit.userId }
+      }).then(commit('getUser'))
     }
   },
   modules: {},
-  getters: {}
+  getters: {
+    getUserName(state) {
+      return state.userName
+    },
+    getUserId(state) {
+      return state.userId
+    }
+  }
 })
