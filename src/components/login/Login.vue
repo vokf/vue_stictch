@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container>
-      <el-header>header</el-header>
+      <el-header></el-header>
       <el-main
         style="background: #c0cee9;height: 300px;width: 300px;margin-left: auto;margin-right: auto"
       >
@@ -12,11 +12,14 @@
               auto-complete="off"
               v-model="user.userName"
               clearable
-            />
+              prefix-icon="fa fa-user-o"
+            >
+            </el-input>
           </el-form-item>
 
           <el-form-item prop="password">
             <el-input
+              prefix-icon="fa fa-key"
               auto-complete="off"
               type="password"
               show-password
@@ -45,18 +48,11 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 export function login() {}
 export default {
   name: 'Login',
-  props: {
-    theUserId: {
-      type: Number
-    },
-    theUserName: {
-      type: String
-    }
-  },
+
   data() {
     //自定义验证密码
     let validatePass = (rule, value, callback) => {
@@ -97,56 +93,12 @@ export default {
       }
     }
   },
-  created() {
-    let that = this
-    that.account()
-    localStorage.removeItem('store')
-  },
+  created() {},
 
   mounted() {},
   methods: {
-    ...mapActions(['upUserId']),
     ...mapMutations(['updateUserId']),
-    /**
-     * 获取cookie
-     */
-    getCookie() {
-      if (document.cookie.length > 0) {
-        const arr = document.cookie.split('; ')
-        for (let i = 0; i < arr.length; i++) {
-          let arr2 = arr[i].split('=')
-          if (arr2[0] === 'userName') {
-            //  console.log(arr2[1])
-            this.user.userName = arr2[1] //保存到保存数据的地方
-          } else if (arr2[0] === 'password') {
-            // console.log(arr2[1])
-            this.user.password = arr2[1]
-          }
-        }
-        this.check = true
-      }
-    },
-    /**
-     * 清除 cookie
-     */
-    clearCookie() {
-      this.setCookie('', '', -1) //修改2值都为空，天数为负1天就好了
-    },
 
-    /**
-     * 设置cookie
-     * @param c_name 账号
-     * @param c_pwd 密码
-     * @param c_day 更新时间
-     */
-    setCookie(c_name, c_pwd, c_day) {
-      const exdate = new Date() //获取时间
-      exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * c_day) //保存的天数
-      document.cookie =
-        'userName=' + c_name + ';path=/;expires=' + exdate.toLocaleString()
-      document.cookie =
-        'password=' + c_pwd + ';path=/;expires=' + exdate.toLocaleString()
-    },
     /**
      * 登录
      */
@@ -165,7 +117,7 @@ export default {
           .$axios({
             method: 'post',
             // 请求url
-            url: 'http://localhost:8090/user/userLogin',
+            url: '/user/userLogin',
             // 请求参数
             data: loginData,
             // 在请求头中添加一下内容
@@ -176,7 +128,7 @@ export default {
             }
           })
           .then(res => {
-            if (res.status === 200) {
+            if (res.data.msg === 'success') {
               // let h = that.$createElement
               that.$message.success('登录成功')
 
@@ -187,29 +139,19 @@ export default {
                 }
               })
 
-              that.updateUserId({ id: res.data.obj })
+              that.updateUserId({
+                id: res.data.userId,
+                username: res.data.userName
+              })
             }
-            if (res.status === 500) {
+            if (res.data.msg === 'error') {
               that.$message.error('密码错误,请重新登录')
             }
           })
           .catch(() => {
             that.$message.error('服务器错误，请联系管理员')
           })
-        if (that.check === true) {
-          that.setCookie(that.user.userName, that.user.password)
-        } else {
-          that.clearCookie()
-        }
       })
-    },
-    account() {
-      if (document.cookie.length <= 0) {
-        const that = this
-        console.log(that.getCookie('userName'))
-        that.user.userName = that.getCookie('userName')
-        that.user.password = that.getCookie('password')
-      }
     }
   }
 }
