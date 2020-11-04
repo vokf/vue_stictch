@@ -47,6 +47,7 @@
             label="电话号码:"
           >
             <el-input
+              prefix-icon="fa fa-phone"
               v-model="user.phoneNum"
               @paste.native.capture.prevent="handlePaste"
               placeholder="电话号码"
@@ -54,6 +55,7 @@
           </el-form-item>
           <el-form-item prop="email" :label-width="labelWidth" label="邮箱:">
             <el-input
+              prefix-icon="fa fa-envelope"
               @paste.native.capture.prevent="handlePaste"
               placeholder="邮箱"
               v-model="user.email"
