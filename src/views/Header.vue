@@ -104,6 +104,7 @@ export default {
 
   position: fixed;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
   .el-menu {
     padding: {
       left: 15px;
@@ -113,6 +114,7 @@ export default {
     position: relative;
     height: 100px;
   }
+
   .el-menu-item {
     position: relative;
     top: 20px;
@@ -120,6 +122,7 @@ export default {
     width: 120px;
 
     text-align: center;
+
     span {
       letter-spacing: 2px;
       font: {
@@ -129,6 +132,7 @@ export default {
       //
     }
   }
+
   .el-menu-item > span:nth-child(2) {
     position: relative;
     left: 5px;
@@ -148,15 +152,18 @@ export default {
     left: 1200px;
   }
 }
+
 .head {
   position: fixed;
   z-index: 4000;
   top: 0;
+
   .btn {
     position: fixed;
     top: 35px;
     left: 1100px;
   }
+
   .el-image {
     height: 50px;
     width: 50px;
